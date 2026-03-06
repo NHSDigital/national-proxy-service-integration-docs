@@ -10,7 +10,7 @@ This documentation is intended for teams integrating with national services to s
 The primary audience is:
 
 - Software engineers
-- Integration engineers
+- QAs / Test engineers
 - Solution and technical architects
 
 These readers are expected to:
@@ -19,6 +19,7 @@ These readers are expected to:
 - Integrate with REST APIs and event mechanisms
 - Design system-to-system interactions
 - Ensure environment configuration and security requirements are met
+- Solutions assurance through functional and non-functional testing
 
 The documentation assumes familiarity with:
 
@@ -46,7 +47,7 @@ It is not intended to define product strategy, user interface design, or local o
 
 ## Clinical and Information Governance Stakeholders
 
-Certain sections — particularly those relating to proxy access and delegated authority — are relevant to:
+Certain sections - particularly those relating to clinical workflows and patient facing journeys - are relevant to:
 
 - Clinical safety officers
 - Information governance leads

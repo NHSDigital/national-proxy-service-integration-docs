@@ -13,7 +13,9 @@
       { "label": "How to use these docs", "path": "/getting-started/how-to-use-these-docs" },
       { "label": "Glossary of terms", "path": "/getting-started/glossary-of-terms" },
       { "label": "Environments and access", "path": "/getting-started/environments-and-access" },
-      { "label": "Architecture overview", "path": "/getting-started/architecture-overview" }
+      { "label": "Architecture overview", "path": "/getting-started/architecture-overview" },
+      { "label": "Proxy role state machine", "path": "/getting-started/proxy-role-state-machine" },
+      { "label": "Proxy role data model", "path": "/getting-started/proxy-role-data-model" }
     ]
   },
   {
@@ -53,6 +55,23 @@
         "label": "IM1 PFS supplier guidance",
         "path": "/patient-facing-journeys/im1-pfs-supplier-guidance"
       }
+    ]
+  },
+  {
+    "label": "Testing",
+    "items": [{ "label": "API Producer guidance", "path": "/testing/api-producer-guidance" }]
+  },
+  {
+    "label": "FHIR specifications",
+    "items": [
+      { "label": "Overview", "path": "/fhir-specifications" },
+      {
+        "label": "QuestionnaireResponse resource",
+        "path": "/fhir-specifications/questionnaire-response-resource"
+      },
+      { "label": "Consent resource", "path": "/fhir-specifications/consent-resource" },
+      { "label": "Patient resource", "path": "/fhir-specifications/patient-resource" },
+      { "label": "RelatedPerson resource", "path": "/fhir-specifications/related-person-resource" }
     ]
   },
   {

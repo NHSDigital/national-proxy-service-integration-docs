@@ -23,7 +23,7 @@ This includes:
 - Authentication flows
 - Determining proxy roles
 - Token exchange mechanisms
-- Accessing APIs using delegated context
+- Accessing APIs as a proxy
 
 While NHS login is the primary and supported mechanism for enabling proxy access within national services, similar workflows could be implemented using another OpenID Connect (OIDC) and OAuth2-compliant identity provider.
 
@@ -74,6 +74,11 @@ Access to national APIs requires a multi-stage token exchange:
 This access token is then used to call national service APIs.
 
 Each stage enforces security, audience restriction, and scope validation.
+
+<div class="nhsuk-inset-text">
+  <p> If you are an API producer on the API management platform, then see also the <a href="{{ '/patient-facing-journeys/api-producer-guidance' | url }}">API producer guidance</a> on how to enable proxy access to your API.
+  </p>
+</div>
 
 ## NHS App Integration Considerations
 
