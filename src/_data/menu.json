@@ -11,6 +11,7 @@
     "label": "Getting started",
     "items": [
       { "label": "How to use these docs", "path": "/getting-started/how-to-use-these-docs" },
+      { "label": "Glossary of terms", "path": "/getting-started/glossary-of-terms" },
       { "label": "Environments and access", "path": "/getting-started/environments-and-access" },
       { "label": "Architecture overview", "path": "/getting-started/architecture-overview" }
     ]
