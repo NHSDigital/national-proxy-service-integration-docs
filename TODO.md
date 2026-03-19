@@ -20,9 +20,11 @@ The below is a list of docs that have currently not been created / completed, bu
 
 `/clinical-workflows/migrating-roles/`
 
+- How suppliers should identify records to migrate. Mandatory requirements such as both parties needing to have an NHS number
+- Call out guidance on NOT migrating proxies without an NHS number (Care home use case and cross-practice proxy's set up with fake patient records)
 - Assurance process to test the migration in PTL environment
 - Steps to follow for migration & cut-over
-- Any technical guidance
+- Any technical guidance to inform what a created role MUST have to supplement the FHIR spec
 
 ## New
 
@@ -37,7 +39,7 @@ The below is a list of docs that have currently not been created / completed, bu
 
 Here we want any documentation that isn't obvious through our spec's alone.
 
-Consider documentation approach to health checks docs (although personally I think this is too detailed and duplicates what should be evident in the spec):
+Consider documentation approach akin to health checks docs (although avoid duplicating what should already be evident in the API spec):
 
 https://nhsdigital.github.io/digital-health-checks-public/fhir-bundle-descriptions/overview/
 
