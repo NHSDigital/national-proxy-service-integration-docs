@@ -1,0 +1,827 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "IM1 PFS Auth API",
+    "version": "0.3.0"
+  },
+  "servers": [
+    {
+      "url": "/pfs"
+    }
+  ],
+  "paths": {
+    "/nhslogin-user-sessions": {
+      "post": {
+        "tags": [
+          "sessions"
+        ],
+        "summary": "Create a session using NHS login",
+        "description": "Creates a session for an authenticated user",
+        "parameters": [
+          {
+            "name": "X-API-ApplicationId",
+            "in": "header",
+            "description": "The identity of the subsidiary",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-API-Version",
+            "in": "header",
+            "description": "The version of the API requested",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request model with details obtained from an NHS login issued access token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.CreateNHSloginUserSessionRequestModel"
+              },
+              "examples": {
+                "UserIsThePatient": {
+                  "summary": "User and Patient have the same NHS number",
+                  "description": "User and Patient have the same NHS number and therefore represents a request for a patient at the practice with an online user account",
+                  "value": {
+                    "UserIdentifier": {
+                      "IdentifierValue": "9434765919",
+                      "IdentifierType": "NhsNumber"
+                    },
+                    "PatientIdentifier": {
+                      "IdentifierValue": "9434765919",
+                      "IdentifierType": "NhsNumber"
+                    },
+                    "PatientNationalPracticeCode": "A82648"
+                  }
+                },
+                "UserAndPatientDifferent": {
+                  "summary": "User and Patient have different NHS numbers",
+                  "description": "User and Patient have different NHS numbers; the User has online access to services for the Patient",
+                  "value": {
+                    "UserIdentifier": {
+                      "IdentifierValue": "1111111111",
+                      "IdentifierType": "NhsNumber"
+                    },
+                    "PatientIdentifier": {
+                      "IdentifierValue": "2222222222",
+                      "IdentifierType": "NhsNumber"
+                    },
+                    "PatientNationalPracticeCode": "B12345"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The session was created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.CreateNHSloginUserSessionResponseModel"
+                },
+                "examples": {
+                  "UserIsThePatient": {
+                    "summary": "User and Patient have the same NHS number in the request",
+                    "description": "When the User and Patient have the same NHS number in the request it is expected that the User is a patient at the practice, has an online account and may have access to manage services for others. This example demonstrates the expected payload where the user does have an online account and two other patients that they can access services for.",
+                    "value": {
+                      "EndUserSessionId": "SESS_mDq6nE2b8R7KQ0v",
+                      "SessionId": "SID_2qZ9yJpVxHq4N3b",
+                      "ApplicationLinkLevel": "Linked",
+                      "Title": "Mr",
+                      "FirstName": "Alex",
+                      "Surname": "Taylor",
+                      "LastAccessTimestamp": "2025-09-26T10:15:30Z",
+                      "UserPatientIdentifiers": [
+                        {
+                          "IdentifierValue": "9434765919",
+                          "IdentifierType": "NhsNumber"
+                        }
+                      ],
+                      "UserPatientLinks": [
+                        {
+                          "UserPatientLinkToken": "link_self_9aLw3G7kVQ",
+                          "PatientActivityContextGuid": "a1e2b3c4-d5f6-4f3e-9a1b-12ab34cd56ef",
+                          "NationalPracticeCode": "A82648",
+                          "Title": "Mr",
+                          "FirstName": "Alex",
+                          "Surname": "Taylor",
+                          "DateOfBirth": "1985-06-25",
+                          "AssociationType": "Self",
+                          "PatientIdentifiers": [
+                            {
+                              "IdentifierValue": "9434765919",
+                              "IdentifierType": "NhsNumber"
+                            }
+                          ],
+                          "ApplicationLinkLevel": "Linked",
+                          "AccountRegistrationStatus": "Active",
+                          "AccountCreationDate": "2024-08-14T09:12:43Z",
+                          "EffectiveServices": {
+                            "AppointmentsEnabled": true,
+                            "DemographicsUpdateEnabled": true,
+                            "EpsEnabled": true,
+                            "MedicalRecordEnabled": true,
+                            "OnlineTriageEnabled": false,
+                            "PracticePatientCommunicationEnabled": false,
+                            "PrescribingEnabled": true,
+                            "RecordSharingEnabled": false,
+                            "RecordViewAuditEnabled": true,
+                            "MedicalRecord": {
+                              "RecordAccessScheme": "DetailedCodedCareRecord",
+                              "AllergiesEnabled": true,
+                              "ConsultationsEnabled": true,
+                              "ImmunisationsEnabled": true,
+                              "DocumentsEnabled": true,
+                              "MedicationEnabled": true,
+                              "ProblemsEnabled": true,
+                              "TestResultsEnabled": true
+                            }
+                          },
+                          "DispensingEnabled": true
+                        },
+                        {
+                          "UserPatientLinkToken": "link_proxy_jane_5QJw7r2m",
+                          "PatientActivityContextGuid": "b2c3d4e5-f6a7-45b8-8c90-abcdefabcdef",
+                          "NationalPracticeCode": "A82648",
+                          "Title": "Mrs",
+                          "FirstName": "Jane",
+                          "Surname": "Doe",
+                          "DateOfBirth": "1979-01-15",
+                          "AssociationType": "Proxy",
+                          "PatientIdentifiers": [
+                            {
+                              "IdentifierValue": "2222222222",
+                              "IdentifierType": "NhsNumber"
+                            }
+                          ],
+                          "ApplicationLinkLevel": "Linked",
+                          "AccountRegistrationStatus": "Active",
+                          "AccountCreationDate": "2023-11-03T14:05:12Z",
+                          "EffectiveServices": {
+                            "AppointmentsEnabled": false,
+                            "DemographicsUpdateEnabled": true,
+                            "EpsEnabled": false,
+                            "MedicalRecordEnabled": true,
+                            "OnlineTriageEnabled": true,
+                            "PracticePatientCommunicationEnabled": true,
+                            "PrescribingEnabled": true,
+                            "RecordSharingEnabled": false,
+                            "RecordViewAuditEnabled": true,
+                            "MedicalRecord": {
+                              "RecordAccessScheme": "CoreSummaryCareRecord",
+                              "AllergiesEnabled": true,
+                              "ConsultationsEnabled": true,
+                              "ImmunisationsEnabled": true,
+                              "DocumentsEnabled": true,
+                              "MedicationEnabled": true,
+                              "ProblemsEnabled": true,
+                              "TestResultsEnabled": true
+                            }
+                          },
+                          "DispensingEnabled": true
+                        },
+                        {
+                          "UserPatientLinkToken": "link_proxy_ella_Z01r8yPa",
+                          "PatientActivityContextGuid": "c3d4e5f6-a7b8-49cd-9e01-111213141516",
+                          "NationalPracticeCode": "A82648",
+                          "Title": "Ms",
+                          "FirstName": "Ella",
+                          "Surname": "Taylor",
+                          "DateOfBirth": "2010-03-02",
+                          "AssociationType": "Proxy",
+                          "PatientIdentifiers": [
+                            {
+                              "IdentifierValue": "3333333333",
+                              "IdentifierType": "NhsNumber"
+                            }
+                          ],
+                          "ApplicationLinkLevel": "Linked",
+                          "AccountRegistrationStatus": "Active",
+                          "AccountCreationDate": "2021-06-19T08:22:10Z",
+                          "EffectiveServices": {
+                            "AppointmentsEnabled": true,
+                            "DemographicsUpdateEnabled": true,
+                            "EpsEnabled": false,
+                            "MedicalRecordEnabled": true,
+                            "OnlineTriageEnabled": false,
+                            "PracticePatientCommunicationEnabled": true,
+                            "PrescribingEnabled": false,
+                            "RecordSharingEnabled": false,
+                            "RecordViewAuditEnabled": true,
+                            "MedicalRecord": {
+                              "RecordAccessScheme": "DetailedCodedCareRecord",
+                              "AllergiesEnabled": true,
+                              "ConsultationsEnabled": true,
+                              "ImmunisationsEnabled": true,
+                              "DocumentsEnabled": true,
+                              "MedicationEnabled": true,
+                              "ProblemsEnabled": true,
+                              "TestResultsEnabled": true
+                            }
+                          },
+                          "DispensingEnabled": true
+                        }
+                      ]
+                    }
+                  },
+                  "UserAndPatientDifferent": {
+                    "summary": "User and Patient have different NHS numbers in the request",
+                    "description": "When the User and Patient have different NHS numbers in the request it is expected that the User has an online account at the practice, may or may not be a patient, and has access to manage services for the patient prescribed in the request. This example demonstrates the expected payload where the user does have an online account and can access services for the prescribed patient.",
+                    "value": {
+                      "EndUserSessionId": "SESS_5pBtKq27UoK5bQm",
+                      "SessionId": "SID_7Yt4hQx0ePn3VwF",
+                      "ApplicationLinkLevel": "Linked",
+                      "Title": "Mr",
+                      "FirstName": "Sam",
+                      "Surname": "Jones",
+                      "LastAccessTimestamp": "2025-09-26T10:15:30Z",
+                      "UserPatientIdentifiers": [
+                        {
+                          "IdentifierValue": "1111111111",
+                          "IdentifierType": "NhsNumber"
+                        }
+                      ],
+                      "UserPatientLinks": [
+                        {
+                          "UserPatientLinkToken": "link_proxy_clare_2dXw5LmN",
+                          "PatientActivityContextGuid": "d4e5f6a7-b8c9-4a0b-9123-abcdef123456",
+                          "NationalPracticeCode": "A82648",
+                          "Title": "Mrs",
+                          "FirstName": "Clare",
+                          "Surname": "Jones",
+                          "DateOfBirth": "1975-04-21",
+                          "AssociationType": "Proxy",
+                          "PatientIdentifiers": [
+                            {
+                              "IdentifierValue": "2222222222",
+                              "IdentifierType": "NhsNumber"
+                            }
+                          ],
+                          "ApplicationLinkLevel": "Linked",
+                          "AccountRegistrationStatus": "Active",
+                          "AccountCreationDate": "2022-02-10T11:45:00Z",
+                          "EffectiveServices": {
+                            "AppointmentsEnabled": true,
+                            "DemographicsUpdateEnabled": true,
+                            "EpsEnabled": false,
+                            "MedicalRecordEnabled": true,
+                            "OnlineTriageEnabled": false,
+                            "PracticePatientCommunicationEnabled": true,
+                            "PrescribingEnabled": true,
+                            "RecordSharingEnabled": false,
+                            "RecordViewAuditEnabled": true,
+                            "MedicalRecord": {
+                              "RecordAccessScheme": "CoreSummaryCareRecord",
+                              "AllergiesEnabled": true,
+                              "ConsultationsEnabled": true,
+                              "ImmunisationsEnabled": true,
+                              "DocumentsEnabled": true,
+                              "MedicationEnabled": true,
+                              "ProblemsEnabled": true,
+                              "TestResultsEnabled": true
+                            }
+                          },
+                          "DispensingEnabled": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - invalid or malformed request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.ErrorModel"
+                },
+                "examples": {
+                  "BadRequest": {
+                    "summary": "Invalid request format",
+                    "value": {
+                      "message": "The request payload was invalid or missing required fields."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised - user does not have access to online services for the provided patient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.ErrorModel"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "summary": "User not authorised for patient services",
+                    "value": {
+                      "message": "The user does not have access to the requested patient's online services."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - user does not have an online account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.ErrorModel"
+                },
+                "examples": {
+                  "UserNotFound": {
+                    "summary": "User has no online account",
+                    "value": {
+                      "message": "No online account exists for the given user."
+                    }
+                  },
+                  "PatientNotFound": {
+                    "summary": "No patient record",
+                    "value": {
+                      "message": "No patient record exists for the provided patient identifier."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - unexpected failure in the service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.ErrorModel"
+                },
+                "examples": {
+                  "ServerError": {
+                    "summary": "Unexpected server error",
+                    "value": {
+                      "message": "An unexpected error occurred while processing the request."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Emis.PatientFacingServices.ExternalModel.Users.CreateNHSloginUserSessionRequestModel": {
+        "type": "object",
+        "properties": {
+          "UserIdentifier": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierModel"
+          },
+          "PatientIdentifier": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierModel"
+          },
+          "PatientNationalPracticeCode": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "UserIdentifier",
+          "PatientIdentifier",
+          "PatientNationalPracticeCode"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.CreateNHSloginUserSessionResponseModel": {
+        "type": "object",
+        "properties": {
+          "EndUserSessionId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "SessionId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "ApplicationLinkLevel": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserApplicationLinkLevelType"
+          },
+          "Title": {
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "FirstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "Surname": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "LastAccessTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "UserPatientIdentifiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierModel"
+            }
+          },
+          "UserPatientLinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.ExtendedUserPatientLinkModel"
+            }
+          }
+        },
+        "required": [
+          "EndUserSessionId",
+          "SessionId",
+          "ApplicationLinkLevel",
+          "Title",
+          "FirstName",
+          "Surname",
+          "LastAccessTimestamp",
+          "UserPatientIdentifiers",
+          "UserPatientLinks"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.ExtendedUserPatientLinkModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserPatientLinkModel"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "PatientIdentifiers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierModel"
+                }
+              }
+            },
+            "required": [
+              "PatientIdentifiers"
+            ]
+          },
+          {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserSettingsModel"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierModel": {
+        "type": "object",
+        "properties": {
+          "IdentifierValue": {
+            "type": "string"
+          },
+          "IdentifierType": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierType"
+          }
+        },
+        "required": [
+          "IdentifierValue",
+          "IdentifierType"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.Demographics.PatientIdentifierType": {
+        "enum": [
+          "NhsNumber"
+        ],
+        "type": "string"
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.AccountRegistrationStatusType": {
+        "enum": [
+          "Unknown",
+          "Inactive",
+          "Active"
+        ],
+        "type": "string"
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.AssociationType": {
+        "enum": [
+          "None",
+          "Self",
+          "Proxy"
+        ],
+        "type": "string"
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.CreateSessionRequestModel": {
+        "type": "object",
+        "properties": {
+          "AccessIdentityGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "NationalPracticeCode": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "AccessIdentityGuid",
+          "NationalPracticeCode"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.CreateSessionResponseModel": {
+        "type": "object",
+        "properties": {
+          "SessionId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "ApplicationLinkLevel": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserApplicationLinkLevelType"
+          },
+          "FirstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "Surname": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "Title": {
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "LastAccessTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "UserPatientLinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserPatientLinkModel"
+            },
+            "nullable": true
+          }
+        },
+        "required": [
+          "SessionId",
+          "ApplicationLinkLevel",
+          "FirstName",
+          "Surname",
+          "Title",
+          "LastAccessTimestamp",
+          "UserPatientLinks"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.UserSettingsModel": {
+        "type": "object",
+        "properties": {
+          "ApplicationLinkLevel": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserApplicationLinkLevelType"
+          },
+          "AccountRegistrationStatus": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.AccountRegistrationStatusType"
+          },
+          "AccountCreationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "EffectiveServices": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesModel"
+          },
+          "DispensingEnabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ApplicationLinkLevel",
+          "AccountRegistrationStatus",
+          "AccountCreationDate",
+          "DispensingEnabled"
+        ]
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.UserApplicationLinkLevelType": {
+        "enum": [
+          "Unknown",
+          "Restricted",
+          "Linked"
+        ],
+        "type": "string"
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType": {
+        "enum": [
+          "Unknown",
+          "Disabled",
+          "Requested",
+          "NoChange"
+        ],
+        "type": "string"
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.UserPatientLinkModel": {
+        "type": "object",
+        "properties": {
+          "UserPatientLinkToken": {
+            "type": "string"
+          },
+          "PatientActivityContextGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "NationalPracticeCode": {
+            "type": "string"
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true
+          },
+          "FirstName": {
+            "type": "string"
+          },
+          "Surname": {
+            "type": "string"
+          },
+          "DateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "AssociationType": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.AssociationType"
+          }
+        },
+        "required": [
+          "UserPatientLinkToken",
+          "PatientActivityContextGuid",
+          "NationalPracticeCode",
+          "Title",
+          "FirstName",
+          "Surname",
+          "DateOfBirth",
+          "AssociationType"
+        ]
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.MedicalRecordSettingsStatusModel": {
+        "type": "object",
+        "properties": {
+          "Allergies": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          },
+          "Consultations": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          },
+          "Immunisations": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          },
+          "Documents": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          },
+          "Medication": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          },
+          "Problems": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          },
+          "TestResults": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.Users.UserServicesStatusType"
+          }
+        },
+        "required": [
+          "Allergies",
+          "Consultations",
+          "Documents",
+          "Immunisations",
+          "Medication",
+          "Problems",
+          "TestResults"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.MedicalRecordSettingsModel": {
+        "type": "object",
+        "properties": {
+          "RecordAccessScheme": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.MedicalRecordAccessSchemeType"
+          },
+          "AllergiesEnabled": {
+            "type": "boolean"
+          },
+          "ConsultationsEnabled": {
+            "type": "boolean"
+          },
+          "ImmunisationsEnabled": {
+            "type": "boolean"
+          },
+          "DocumentsEnabled": {
+            "type": "boolean"
+          },
+          "MedicationEnabled": {
+            "type": "boolean"
+          },
+          "ProblemsEnabled": {
+            "type": "boolean"
+          },
+          "TestResultsEnabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "RecordAccessScheme",
+          "AllergiesEnabled",
+          "ConsultationsEnabled",
+          "ImmunisationsEnabled",
+          "DocumentsEnabled",
+          "MedicationEnabled",
+          "ProblemsEnabled",
+          "TestResultsEnabled"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.MedicalRecordAccessSchemeType": {
+        "enum": [
+          "Legacy",
+          "None",
+          "CoreSummaryCareRecord",
+          "DetailedCodedCareRecord"
+        ],
+        "type": "string"
+      },
+      "Emis.PatientFacingServices.ExternalModel.Users.UserServicesModel": {
+        "type": "object",
+        "properties": {
+          "AppointmentsEnabled": {
+            "type": "boolean"
+          },
+          "DemographicsUpdateEnabled": {
+            "type": "boolean"
+          },
+          "EpsEnabled": {
+            "type": "boolean"
+          },
+          "MedicalRecordEnabled": {
+            "type": "boolean"
+          },
+          "OnlineTriageEnabled": {
+            "type": "boolean"
+          },
+          "PracticePatientCommunicationEnabled": {
+            "type": "boolean"
+          },
+          "PrescribingEnabled": {
+            "type": "boolean"
+          },
+          "RecordSharingEnabled": {
+            "type": "boolean"
+          },
+          "RecordViewAuditEnabled": {
+            "type": "boolean"
+          },
+          "MedicalRecord": {
+            "$ref": "#/components/schemas/Emis.PatientFacingServices.ExternalModel.MedicalRecordSettingsModel"
+          }
+        },
+        "required": [
+          "AppointmentsEnabled",
+          "DemographicsUpdateEnabled",
+          "EpsEnabled",
+          "MedicalRecordEnabled",
+          "OnlineTriageEnabled",
+          "PracticePatientCommunicationEnabled",
+          "PrescribingEnabled",
+          "RecordSharingEnabled",
+          "RecordViewAuditEnabled",
+          "MedicalRecord"
+        ],
+        "additionalProperties": false
+      },
+      "Emis.PatientFacingServices.ExternalModel.ErrorModel": {
+        "type": "object",        
+        "properties": {          
+          "message": {
+            "type": "string",            
+            "minLength": 1
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
