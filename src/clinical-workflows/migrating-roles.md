@@ -55,6 +55,10 @@ The following exit criteria should be met:
 - Assurance documentation has been signed off.
 - DOS onboarding has been signed off.
 
+Suppliers are required to conduct testing in the same technical manner as they would for the actual migration. This involves using the `POST /Consent` endpoint to send proxy roles to the VRS INT environment.
+
+Before testing starts, the Proxy Team will supply each supplier with an additional header. This header must be included in every API request so that they can track which proxy roles have been migrated to the national service during each round of testing.
+
 ## Migration plan
 
 {{ imagePopOut('/assets/images/migration_plan.png' | url, 'Migration plan ') }}
