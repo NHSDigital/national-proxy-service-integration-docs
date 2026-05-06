@@ -30,6 +30,12 @@ The table below maps out the valid use of status reasons for each status code. T
       <td>Role created</td>
     </tr>
     <tr>
+      <td>Rejected</td>
+      <td>Active</td>
+      <td>ROLE_ACTIVATED</td>
+      <td>Role activated</td>
+    </tr>
+    <tr>
       <td>Inactive</td>
       <td>Active</td>
       <td>ROLE_REACTIVATED</td>
